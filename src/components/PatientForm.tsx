@@ -3,19 +3,19 @@ import Error from "./Error.tsx";
 import { DraftPatient } from "../types/index.ts";
 import { usePatientStore } from "../store.ts";
 
-
 export default function PatientForm() {
-
-  const {addPatient} = usePatientStore()
+  const { addPatient } = usePatientStore();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<DraftPatient>();
 
   const registerPatient = (data: DraftPatient) => {
     addPatient(data);
+    reset();
   };
 
   return (
@@ -64,9 +64,7 @@ export default function PatientForm() {
               maxLength: { value: 40, message: "Máximo 40 letras" },
             })}
           />
-          {errors.caretaker && (
-            <Error>{errors.caretaker?.message}</Error>
-          )}
+          {errors.caretaker && <Error>{errors.caretaker?.message}</Error>}
         </div>
 
         <div className="mb-5">
