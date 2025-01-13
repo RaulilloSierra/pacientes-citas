@@ -1,16 +1,16 @@
 import { useForm } from "react-hook-form";
 import Error from "./Error.tsx";
+import { DraftPatient } from "../types/index.ts";
 
 export default function PatientForm() {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
-  console.log(errors);
+  } = useForm<DraftPatient>();
 
-  const registerPatient = () => {
-    console.log("Nuevo paciente");
+  const registerPatient = (data: DraftPatient) => {
+    console.log(data);
   };
 
   return (
@@ -42,9 +42,6 @@ export default function PatientForm() {
             })}
           />
           {errors.name && <Error>{errors.name?.message as String}</Error>}
-          {errors.maxLength && (
-            <Error>{errors.maxLength?.message as String}</Error>
-          )}
         </div>
 
         <div className="mb-5">
@@ -63,10 +60,7 @@ export default function PatientForm() {
             })}
           />
           {errors.caretaker && (
-            <Error>{errors.caretaker?.message as String}</Error>
-          )}
-          {errors.maxLength && (
-            <Error>{errors.maxLength?.message as String}</Error>
+            <Error>{errors.caretaker?.message}</Error>
           )}
         </div>
 
@@ -117,7 +111,9 @@ export default function PatientForm() {
               required: "Los síntomas son obligatorios",
             })}
           ></textarea>
-          {errors.symptoms && <Error>{errors.symptoms?.message as String}</Error>}
+          {errors.symptoms && (
+            <Error>{errors.symptoms?.message as String}</Error>
+          )}
         </div>
 
         <input
