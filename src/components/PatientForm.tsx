@@ -89,14 +89,14 @@ export default function PatientForm() {
 
         <div className="mb-5">
           <label htmlFor="date" className="text-sm uppercase font-bold">
-            Fecha Alta
+            Fecha Ingreso
           </label>
           <input
             id="date"
             className="w-full p-3  border border-gray-100"
             type="date"
             {...register("date", {
-              required: "La fecha de alta es obligatoria",
+              required: "La fecha de ingreso es obligatoria",
             })}
           />
           {errors.date && <Error>{errors.date?.message as String}</Error>}
