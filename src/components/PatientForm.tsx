@@ -1,20 +1,39 @@
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import Error from "./Error.tsx";
 import { DraftPatient } from "../types/index.ts";
 import { usePatientStore } from "../store.ts";
 
 export default function PatientForm() {
-  const { addPatient } = usePatientStore();
+  const { addPatient, activeId, patients, updatePatient } = usePatientStore();
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
     reset,
   } = useForm<DraftPatient>();
 
+  useEffect(() => {
+    if (activeId) {
+      const activePatients = patients.filter(
+        (patient) => patient.id === activeId
+      )[0];
+      setValue("name", activePatients.name);
+      setValue("caretaker", activePatients.caretaker);
+      setValue("email", activePatients.email);
+      setValue("date", activePatients.date);
+      setValue("symptoms", activePatients.symptoms);
+    }
+  }, [activeId]);
+
   const registerPatient = (data: DraftPatient) => {
-    addPatient(data);
+    if (activeId) {
+      updatePatient(data);
+    } else {
+      addPatient(data);
+    }
     reset();
   };
 
@@ -43,7 +62,7 @@ export default function PatientForm() {
             placeholder="Nombre del Paciente"
             {...register("name", {
               required: "El nombre del paciente es obligatorio",
-              maxLength: { value: 10, message: "Máximo 10 letras" },
+              minLength: { value: 2, message: "Mínimo dos letras" },
             })}
           />
           {errors.name && <Error>{errors.name?.message as String}</Error>}
